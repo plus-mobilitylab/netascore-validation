@@ -28,8 +28,9 @@ for tile in tiles:
   url_full = f"{url_base}/{tile.z}/{tile.x}/{tile.y}?access_token={token}"
   response = requests.get(url_full)
   data = vt_bytes_to_geojson(response.content, tile.x, tile.y, tile.z, layer = "image")
-  for feature in data['features']:
-    output['features'].append(feature)
+  for feature in data["features"]:
+    feature["properties"]["compass_angle"] = round(feature["properties"]["compass_angle"], 1)
+    output["features"].append(feature)
 
 # Save output to file.
 with open(f"data/{aoi}_images.geojson", "w") as f:
