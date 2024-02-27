@@ -1,3 +1,64 @@
 # Validating bikeability indices of NetAScore
 
 This repository contains code to sample Mapillary streetview imagery for validation of the bikeability index computed by [NetAScore](https://github.com/plus-mobilitylab/netascore). In an online survey participants will be asked to rate the sampled images in terms of bikeability. Their ratings will be compared to the bikeability index of NetASCore for the street segment captured by the image.
+
+## Description of the sampling process
+
+The individual steps of the sampling workflow are described in more detail below.
+
+### 1. Get the network data
+
+The input data are the street networks of two cities, Salzburg in Austria and Wuppertal in Germany, assessed by NetAScore. The edges in the street network are individual street segments with a bikeability index assigned. The respective GPKG files can be found at:
+
+### 2. Pre-process the network
+
+The street networks are pre-processed as follows:
+
+- Only relevant attribute columns of the street segments are selected. These include the length, the bikeability index, and the considered indicators. For the index and all directional indicators we only select the values computed for the forward direction.
+- Pseudo nodes are removed. This are nodes with only one incoming and one outgoing edge. We only remove them is these edges have equal values for all indicators.
+- The CRS of the network is transformed to EPSG:4326, to match the CRS of the Mapillary images.
+- Two additional attributes are computed for each street segment: compass angle between the startpoint and endpoint, and circuity (i.e. the ratio between street length and straight-line distance between startpoint and endpoint).
+
+**Corresponding script**: [preprocess.R](preprocess.R)
+
+### 3. Retrieve metadata of all images
+
+We call the Mapillary Tiles API to retrieve the metadata of all images inside the bounding boxes of the cities. These metadata include the index, location, date, and compass angle of the images.
+
+**Corresponding script**: [get_mapillary_tiles.py](get_mapillary_tiles.py)
+
+### 4. Match images to the network
+
+Each image is matched to its nearest street segment in the network. Two additional attributes are stored for each image: the distance between the image location and the matched street segment, and the difference between the compass angle of the image and the compass angle of the matched street segment.
+
+**Corresponding script**: [match.R](match.R)
+
+### 5. Create the sampling pool
+
+First, we filter the images according to the following rules:
+
+- Images should be taken within 10 meters from its nearest street segment in the network.
+- The difference in compass angle between the image and its nearest street segment should not be more than 45 degrees.
+- Images should not be panoramic, i.e. made by fish-eye cameras.
+- Images should be captured after January 1st 2020.
+
+We then filter select only those street segments that have at least one matching image. In addition, we use the following rules to further filter the street segments:
+
+- Street segments should be longer than 25 meters.
+- The circuity of street segments should not be higher than 1.2, to avoid segments with sharp corners.
+- Street segments should be labeled by NetAScore as being legally accessible by bicycle.
+- Street segments should have a valid value for each of the considered indicators, i.e. no missing data.
+
+**Corresponding script**: [filter.R](filter.R)
+
+### 6. Sample
+
+We first define five classes of similar bikeability indices: very unbikeable [0,0.2], unbikeable (0.2,0.4], moderate (0.4,0.6], bikeable (0.6,0.8] and very bikeable (0.8,1]. For each bikeability class we sample 25 street segments. We do this in an iterative way, sampling one street segment at a time. Every other street segment intersecting with a 100 meter buffer around the sampled segment is removed from the pool, to avoid ending up with many nearby segments in the sample. For each sampled street segment, we select the most recent image among all images matched to that segment. If there are multiple most recent images, we select the one closest to the startpoint of the street segment.
+
+**Corresponding script**: [sample.R](sample.R)
+
+### 7. Retrieve the image files
+
+We call the Mapillary Graph API to retrieve all sampled images as JPEG files.
+
+**Corresponding script**: [get_mapillary_images.py](get_mapillary_images.py)
