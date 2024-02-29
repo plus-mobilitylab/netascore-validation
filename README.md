@@ -112,3 +112,14 @@ With the assessment script we generate several plots that visualize bikeability 
 Indicators were rated by experts during the conference workshop at CRBAM 2023. Digitized results are available from the [Zenodo repository](http://doi.org/10.5281/zenodo.10724362) (in `4_results/4_indicators_workshop.csv`). The script creates plots of all indicator ratings. For reference we include markers representing normalized weights of the NetAScore default bikeability profile. Outputs are generated in a subdirectory next to the code file named `output`.
 
 **Corresponding script**: [indicator-assessment.ipynb](2_result_assessment/indicator-assessment.ipynb)
+
+### Requirements for running the result assessment code
+
+For executing the code, you need a Python installation (Python 3) and Jupyter extension. Please make sure to have the required Python packages installed:
+
+- plotly
+- geopandas
+- pandas
+- numpy
+- pillow
+- scipy
