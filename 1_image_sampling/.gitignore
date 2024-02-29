@@ -1,0 +1,24 @@
+# Data
+data/*
+!data/.gitkeep
+
+# Images
+img/*
+!img/.gitkeep
+
+# Environment variables
+.env
+
+# History files
+.Rhistory
+.Rapp.history
+
+# Session Data files
+.RData
+.RDataTmp
+
+# User-specific files
+.Ruserdata
+
+# RStudio files
+.Rproj.user/
