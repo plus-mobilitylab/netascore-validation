@@ -16,14 +16,14 @@ The individual steps of the sampling workflow are described in more detail below
 
 ### 1. Get the network data
 
-The input data are the street networks of two cities, Salzburg in Austria and Wuppertal in Germany, assessed by NetAScore. The edges in the street network are individual street segments with a bikeability index assigned. The respective GPKG files can be found at: http://doi.org/10.5281/zenodo.10724362
+The input data are the street networks of two cities, Salzburg in Austria and Wuppertal in Germany, assessed by [NetAScore](https://github.com/plus-mobilitylab/netascore). The edges in the street network are individual street segments with a bikeability index assigned. The GPKG files of the assessed networks can be found at: http://doi.org/10.5281/zenodo.10724362
 
 ### 2. Pre-process the network
 
 The street networks are pre-processed as follows:
 
 - Only relevant attribute columns of the street segments are selected. These include the length, the bikeability index, and the considered indicators. For the index and all directional indicators we only select the values computed for the forward direction.
-- Pseudo nodes are removed. This are nodes with only one incoming and one outgoing edge. We only remove them is these edges have equal values for all indicators.
+- Pseudo nodes are removed. This are nodes with only one incoming and one outgoing edge. We only remove them if these edges have equal values for all indicators.
 - The CRS of the network is transformed to EPSG:4326, to match the CRS of the Mapillary images.
 - Two additional attributes are computed for each street segment: compass angle between the startpoint and endpoint, and circuity (i.e. the ratio between street length and straight-line distance between startpoint and endpoint).
 
@@ -96,5 +96,19 @@ The order of images shown per page should be individually randomized per user by
 **Corresponding script**: [final_sample.ipynb](1_image_sampling/final_sample.ipynb)
 
 
+
 ## Result assessment
 
+### 1. Assessment of image-based bikeability ratings
+
+This part of the workflow forms the core of our result assessment. We use results from the online survey, digitized bikeability ratings of experts collected during the conference, and the Geopackage files created during image sampling. All input data is found in the [Zenodo repository](http://doi.org/10.5281/zenodo.10724362) (`2_data/2_image_sampling`, `3_images` and the CSV-files in `4_results`). If you replicate the folder structure of the repository locally, the script should be able to access all required data. Outputs are generated in a subdirectory next to the code file named `output`.
+
+With the assessment script we generate several plots that visualize bikeability ratings including their statistical dispersion. We add modeled bikeability as red line to these diagrams for reference. The document is structured with section headings referring to the subset of data and type of assessment at hand. We further compute correlation metrics and provide a scatterplot with linear regression in the subsection "Correlation".
+
+**Corresponding script**: [img-assessment.ipynb](2_result_assessment/img-assessment.ipynb)
+
+### 2. Assessment of indicator ratings
+
+Indicators were rated by experts during the conference workshop at CRBAM 2023. Digitized results are available from the [Zenodo repository](http://doi.org/10.5281/zenodo.10724362) (in `4_results/4_indicators_workshop.csv`). The script creates plots of all indicator ratings. For reference we include markers representing normalized weights of the NetAScore default bikeability profile. Outputs are generated in a subdirectory next to the code file named `output`.
+
+**Corresponding script**: [indicator-assessment.ipynb](2_result_assessment/indicator-assessment.ipynb)
