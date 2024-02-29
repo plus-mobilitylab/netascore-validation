@@ -22,3 +22,6 @@ img/*
 
 # RStudio files
 .Rproj.user/
+
+# Mac files
+.DS_Store
