@@ -1,6 +1,6 @@
 # Validating bikeability indices of NetAScore
 
-This repository contains code for validation of the bikeability index computed by [NetAScore](https://github.com/plus-mobilitylab/netascore). All **data and results** are provided in a [Zenodo repository](http://doi.org/10.5281/zenodo.10724362) which supplements the scientific paper. 
+This repository contains code for validation of the bikeability index computed by [NetAScore](https://github.com/plus-mobilitylab/netascore). All **data and results** are provided in a [Zenodo repository](http://doi.org/10.5281/zenodo.10724361) which supplements the scientific paper. 
 
 The evaluation study is based on streetview imagery. In an online survey participants are asked to rate the sampled images in terms of bikeability. Their ratings are then compared to the bikeability index of NetAScore for the street segment shown in the image. Additionally, expert ratings and feedback were collected during the 2023 CRBAM conference in Wuppertal, Germany.
 
