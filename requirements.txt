@@ -1,0 +1,7 @@
+plotly
+geopandas
+pandas
+numpy
+pillow
+scipy
+python-kaleido
