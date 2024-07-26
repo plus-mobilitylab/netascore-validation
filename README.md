@@ -115,11 +115,10 @@ Indicators were rated by experts during the conference workshop at CRBAM 2023. D
 
 ### Requirements for running the result assessment code
 
-For executing the code, you need a Python installation (Python 3) and Jupyter extension. Please make sure to have the required Python packages installed:
+For executing the code, you need a Python installation (Python 3) and Jupyter extension. Please make sure to have the required Python packages installed which are listed in `requirements.txt`.
 
-- plotly
-- geopandas
-- pandas
-- numpy
-- pillow
-- scipy
+If you use the conda package manager, simply create a new environment and install the dependencies from `requirements.txt` by executing the following statement:
+```
+conda create -n "netascore-validation" --file requirements.txt
+```
+Make sure you have the "conda-forge" channel added - you can do so by executing `conda config --add channels conda-forge`.
